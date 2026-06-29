@@ -8,44 +8,49 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:     #0d1b2a;
-  --sur:    #182e45;
-  --sur2:   #1f3a56;
-  --acc:    #4a9eff;
-  --teal:   #00c9a7;
-  --amber:  #f5a623;
-  --orng:   #ff7c4d;
-  --red:    #ff4d6d;
-  --txt:    #e2eaf2;
-  --muted:  #5a7a96;
-  --bdr:    rgba(74,158,255,0.12);
-  --r:      12px;
-  --rsm:    8px;
-  --shad:   0 4px 24px rgba(0,0,0,0.4);
+  --bg:    #0d1b2a;
+  --sur:   #182e45;
+  --sur2:  #1f3a56;
+  --acc:   #4a9eff;
+  --teal:  #00c9a7;
+  --amber: #f5a623;
+  --orng:  #ff7c4d;
+  --red:   #ff4d6d;
+  --txt:   #e2eaf2;
+  --muted: #5a7a96;
+  --ph:    rgba(90,122,150,0.5);
+  --bdr:   rgba(74,158,255,0.12);
+  --r:     12px; --rsm: 8px;
+  --shad:  0 4px 24px rgba(0,0,0,0.4);
 }
 
 html, body {
-  height: 100%;
-  background: var(--bg);
-  color: var(--txt);
+  height: 100%; background: var(--bg); color: var(--txt);
   font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 14px; line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  overflow: hidden;
-  -webkit-text-size-adjust: 100%;
+  overflow: hidden; -webkit-text-size-adjust: 100%;
 }
 
 /* ── HEADER ── */
 #appHeader {
   position: fixed; top: 0; left: 0; right: 0; height: 54px;
-  background: var(--sur);
-  border-bottom: 1px solid var(--bdr);
+  background: var(--sur); border-bottom: 1px solid var(--bdr);
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 16px; z-index: 200;
 }
 .hdr-title { font-size: 15px; font-weight: 800; letter-spacing: -0.3px; }
+.hdr-right { display: flex; align-items: center; gap: 10px; }
 .hdr-date  { font-size: 11px; color: var(--muted); }
+
+#syncBadge {
+  display: none; font-size: 10px; font-weight: 700;
+  padding: 3px 9px; border-radius: 10px;
+  background: rgba(0,201,167,0.12); color: var(--teal);
+  border: 1px solid rgba(0,201,167,0.2);
+}
+#syncBadge.loading { background: rgba(245,166,35,0.12); color: var(--amber); border-color: rgba(245,166,35,0.2); }
+#syncBadge.error   { background: rgba(255,77,109,0.12); color: var(--red);   border-color: rgba(255,77,109,0.2); }
 
 /* ── MAIN ── */
 #mainContent {
@@ -54,7 +59,7 @@ html, body {
 }
 
 /* ── TABS ── */
-.tab-panel { display: none; padding: 14px 14px 8px; min-height: 100%; }
+.tab-panel { display: none; padding: 14px 14px 24px; min-height: 100%; }
 .tab-panel.active { display: block; }
 
 /* ── BOTTOM NAV ── */
@@ -72,58 +77,59 @@ html, body {
   -webkit-tap-highlight-color: transparent;
 }
 .nav-btn.active { color: var(--acc); }
-.nav-icon { font-size: 18px; line-height: 1; }
+.nav-icon  { font-size: 18px; line-height: 1; }
 .nav-label { font-size: 9px; font-weight: 700; letter-spacing: 0.2px; }
+
+/* ── SECTION HEADING ── */
+.tab-heading {
+  font-size: 20px; font-weight: 900; letter-spacing: -0.5px;
+  color: var(--txt); margin-bottom: 16px;
+}
 
 /* ── CARDS ── */
 .card {
   background: var(--sur); border-radius: var(--r);
-  padding: 14px; margin-bottom: 10px; border: 1px solid var(--bdr);
+  padding: 16px; margin-bottom: 12px; border: 1px solid var(--bdr);
 }
 .card-title {
-  font-size: 10px; font-weight: 800; letter-spacing: 1px;
-  text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+  font-size: 14px; font-weight: 900; color: var(--txt);
+  margin-bottom: 14px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--bdr);
+  display: flex; align-items: center; gap: 6px;
 }
 
-/* ── GAUGE SECTION ── */
+/* ── GAUGE ── */
 .gauge-wrap {
   background: var(--sur); border-radius: var(--r);
-  padding: 16px 14px 12px; margin-bottom: 10px;
-  border: 1px solid var(--bdr); text-align: center;
+  padding: 16px 14px 14px; border: 1px solid var(--bdr); text-align: center;
 }
 #gaugesvg { width: 100%; max-width: 270px; display: block; margin: 0 auto; }
-
 .score-row {
   display: flex; justify-content: center; align-items: baseline;
   gap: 3px; margin: 6px 0 4px;
 }
 #scoreNum {
   font-size: 52px; font-weight: 900; line-height: 1;
-  font-variant-numeric: tabular-nums;
-  transition: color 0.3s;
+  font-variant-numeric: tabular-nums; transition: color 0.3s;
 }
 .score-denom { font-size: 18px; color: var(--muted); font-weight: 400; }
-
 #riskBadge {
   display: inline-block; padding: 5px 18px; border-radius: 20px;
-  font-size: 12px; font-weight: 800; letter-spacing: 0.3px;
-  margin-bottom: 6px; transition: all 0.3s;
+  font-size: 12px; font-weight: 800; margin-bottom: 6px; transition: all 0.3s;
 }
 .r0 { background: rgba(0,201,167,0.12); color: var(--teal); }
 .r1 { background: rgba(245,166,35,0.12); color: var(--amber); }
 .r2 { background: rgba(255,124,77,0.12); color: var(--orng); }
 .r3 { background: rgba(255,77,109,0.12); color: var(--red); }
-
-#recommendBox {
-  font-size: 12px; color: var(--muted); line-height: 1.6;
-  min-height: 34px; padding: 0 4px;
-}
-
+#recommendBox { font-size: 12px; color: var(--muted); line-height: 1.6; min-height: 34px; padding: 0 4px; }
 #breatheHint {
   margin-top: 8px; padding: 8px 12px; border-radius: var(--rsm);
   background: rgba(74,158,255,0.06); border: 1px solid rgba(74,158,255,0.15);
   font-size: 11px; color: var(--acc); display: none; line-height: 1.6;
 }
+
+/* ── FOMO GRID (2-col on PC) ── */
+.fomo-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px; }
 
 /* ── QUESTIONS ── */
 .q-item {
@@ -134,60 +140,57 @@ html, body {
   -webkit-tap-highlight-color: transparent;
   user-select: none; border: 1px solid transparent;
 }
-.q-item.checked {
-  background: rgba(255,77,109,0.08);
-  border-color: rgba(255,77,109,0.2);
-}
+.q-item.checked { background: rgba(255,77,109,0.08); border-color: rgba(255,77,109,0.2); }
 .q-check {
   width: 20px; height: 20px; min-width: 20px; border-radius: 50%;
   border: 2px solid var(--muted); display: flex; align-items: center;
   justify-content: center; margin-top: 1px; font-size: 10px;
   transition: all 0.2s; color: white;
 }
-.q-item.checked .q-check {
-  background: var(--red); border-color: var(--red);
-}
+.q-item.checked .q-check { background: var(--red); border-color: var(--red); }
 .q-text { font-size: 12px; line-height: 1.5; }
 .q-item.checked .q-text { color: #ffa0b4; }
-
-.q-count-row {
-  display: flex; justify-content: flex-end; margin-bottom: 6px;
-}
-.q-count-badge {
-  font-size: 11px; font-weight: 700; color: var(--muted);
-}
+.q-count-badge { font-size: 11px; font-weight: 700; color: var(--muted); }
 .q-count-badge span { color: var(--acc); font-size: 14px; }
 
 /* ── FORMS ── */
-.form-group { margin-bottom: 12px; }
-
+.form-group { margin-bottom: 14px; }
 .form-label {
   display: flex; align-items: center; gap: 7px;
-  font-size: 10px; font-weight: 800; letter-spacing: 0.8px;
-  text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  font-size: 12px; font-weight: 800; color: var(--txt); margin-bottom: 7px;
 }
 .letter-badge {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 18px; height: 18px; border-radius: 50%;
-  background: var(--acc); color: white;
-  font-size: 10px; font-weight: 900;
+  width: 20px; height: 20px; border-radius: 50%;
+  color: white; font-size: 11px; font-weight: 900;
 }
 .lba { background: var(--acc); }
 .lbb { background: var(--amber); }
 .lbc { background: var(--orng); }
 .lbd { background: var(--teal); }
 
-textarea, input[type="text"], input[type="url"], input[type="date"] {
+textarea, input[type="text"], input[type="url"],
+input[type="date"], input[type="time"] {
   width: 100%; background: var(--sur2);
   border: 1px solid var(--bdr); border-radius: var(--rsm);
   color: var(--txt); font-family: inherit; font-size: 13px;
   line-height: 1.5; padding: 9px 11px; resize: none;
-  outline: none; transition: border-color 0.2s; -webkit-appearance: none;
+  outline: none; transition: border-color 0.2s;
+  -webkit-appearance: none; color-scheme: dark;
 }
-textarea:focus, input[type="text"]:focus, input[type="url"]:focus {
+textarea:focus, input[type="text"]:focus, input[type="url"]:focus,
+input[type="date"]:focus, input[type="time"]:focus {
   border-color: var(--acc); background: var(--sur);
 }
-textarea { min-height: 68px; }
+textarea { min-height: 72px; }
+
+::placeholder                { color: var(--ph); }
+::-webkit-input-placeholder  { color: var(--ph); }
+::-moz-placeholder           { color: var(--ph); }
+
+.dt-row { display: flex; gap: 8px; }
+.dt-row input[type="date"] { flex: 1; }
+.dt-row input[type="time"] { width: 105px; min-width: 90px; flex: none; }
 
 /* ── STARS ── */
 .stars { display: flex; gap: 8px; align-items: center; }
@@ -207,11 +210,11 @@ textarea { min-height: 68px; }
   font-weight: 800; cursor: pointer; transition: all 0.15s;
   -webkit-tap-highlight-color: transparent; letter-spacing: 0.3px;
 }
-.btn-primary { background: var(--acc); color: white; }
-.btn-primary:active { background: #3a8eef; transform: scale(0.97); }
+.btn-primary   { background: var(--acc); color: white; }
+.btn-primary:active  { background: #3a8eef; transform: scale(0.97); }
 .btn-secondary { background: var(--sur2); color: var(--txt); border: 1px solid var(--bdr); }
 .btn-secondary:active { background: var(--sur); }
-.btn-danger { background: rgba(255,77,109,0.1); color: var(--red); border: 1px solid rgba(255,77,109,0.2); }
+.btn-danger    { background: rgba(255,77,109,0.1); color: var(--red); border: 1px solid rgba(255,77,109,0.2); }
 .btn-danger:active { background: rgba(255,77,109,0.2); }
 .btn-sm { width: auto; display: inline-block; padding: 7px 14px; font-size: 11px; }
 .btn-row { display: flex; gap: 8px; }
@@ -221,22 +224,20 @@ textarea { min-height: 68px; }
 .about-card {
   background: linear-gradient(135deg, rgba(74,158,255,0.05), rgba(0,201,167,0.04));
   border: 1px solid rgba(74,158,255,0.18); border-radius: var(--r);
-  padding: 14px; margin-bottom: 10px;
+  padding: 14px; margin-bottom: 12px;
 }
-.about-title { font-size: 13px; font-weight: 800; color: var(--acc); margin-bottom: 6px; }
-.about-text { font-size: 12px; color: var(--muted); line-height: 1.7; }
+.about-title { font-size: 14px; font-weight: 900; color: var(--acc); margin-bottom: 8px; }
+.about-text  { font-size: 12px; color: var(--muted); line-height: 1.7; }
 .about-text strong { color: var(--txt); }
 
 /* ── HISTORY ── */
 .history-filter {
   display: flex; gap: 6px; margin-bottom: 12px;
   overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
-  padding-bottom: 2px;
 }
 .history-filter::-webkit-scrollbar { display: none; }
-
 .filter-btn {
-  padding: 6px 13px; border-radius: 20px; border: 1px solid var(--bdr);
+  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--bdr);
   background: var(--sur); color: var(--muted); font-size: 11px;
   font-weight: 700; cursor: pointer; white-space: nowrap;
   transition: all 0.15s; -webkit-tap-highlight-color: transparent;
@@ -245,7 +246,7 @@ textarea { min-height: 68px; }
 .filter-btn.active { background: var(--acc); color: white; border-color: var(--acc); }
 
 .hist-item {
-  background: var(--sur); border-radius: var(--r); margin-bottom: 7px;
+  background: var(--sur); border-radius: var(--r); margin-bottom: 8px;
   border: 1px solid var(--bdr); overflow: hidden;
 }
 .hi-hdr {
@@ -260,55 +261,34 @@ textarea { min-height: 68px; }
 .tb-fomo  { background: rgba(255,77,109,0.12); color: var(--red); }
 .tb-abcd  { background: rgba(74,158,255,0.12); color: var(--acc); }
 .tb-learn { background: rgba(0,201,167,0.12); color: var(--teal); }
-
 .hi-date { font-size: 11px; color: var(--muted); flex: 1; }
 .hi-sum  { font-size: 11px; color: var(--txt); font-weight: 700; }
 .hi-chev { font-size: 10px; color: var(--muted); transition: transform 0.2s; }
 .hi-chev.open { transform: rotate(180deg); }
-
-.hi-det {
-  display: none; padding: 0 13px 13px;
-  border-top: 1px solid var(--bdr);
-}
+.hi-det  { display: none; padding: 0 13px 13px; border-top: 1px solid var(--bdr); }
 .hi-det.open { display: block; }
 .hi-field { margin-top: 9px; }
 .hi-fl { font-size: 9px; font-weight: 800; letter-spacing: 0.8px;
          text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
 .hi-fv { font-size: 12px; color: var(--txt); white-space: pre-wrap; word-break: break-word; }
 .hi-del { margin-top: 11px; display: flex; justify-content: flex-end; }
-
-.empty-state {
-  text-align: center; padding: 44px 20px; color: var(--muted);
-}
-.empty-icon { font-size: 36px; margin-bottom: 10px; }
-.empty-txt  { font-size: 12px; line-height: 1.7; }
+.empty-state { text-align: center; padding: 44px 20px; color: var(--muted); }
+.empty-icon  { font-size: 36px; margin-bottom: 10px; }
+.empty-txt   { font-size: 12px; line-height: 1.7; }
 
 /* ── SETTINGS ── */
-.set-section { margin-bottom: 18px; }
-.set-sec-title {
-  font-size: 10px; font-weight: 800; letter-spacing: 1px;
-  text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
-}
-.data-stats {
-  font-size: 12px; color: var(--muted); line-height: 2;
-  margin-top: 8px;
-}
-
-/* GAS Code block */
+.data-stats { font-size: 12px; color: var(--muted); line-height: 2; margin-top: 8px; }
 .gas-code {
   background: #0a1520; border: 1px solid var(--bdr); border-radius: var(--rsm);
   padding: 10px; font-family: 'Courier New', monospace; font-size: 10px;
   color: #7ecbff; overflow-x: auto; white-space: pre;
-  max-height: 200px; overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  max-height: 200px; overflow-y: auto; -webkit-overflow-scrolling: touch;
 }
 .code-copy-row { display: flex; justify-content: flex-end; margin-top: 6px; }
-
 details { margin-top: 8px; }
 summary {
   font-size: 11px; color: var(--acc); cursor: pointer;
-  padding: 4px 0; font-weight: 700;
-  -webkit-tap-highlight-color: transparent;
+  padding: 4px 0; font-weight: 700; -webkit-tap-highlight-color: transparent;
 }
 summary::-webkit-details-marker { color: var(--acc); }
 
@@ -327,98 +307,112 @@ summary::-webkit-details-marker { color: var(--acc); }
 #toast.err { border-color: rgba(255,77,109,0.4); color: var(--red); }
 
 /* ── RESPONSIVE ── */
-@media (min-width: 600px) {
-  .tab-panel { max-width: 520px; margin: 0 auto; }
+@media (min-width: 700px) {
+  .tab-panel { max-width: 880px; margin: 0 auto; padding: 20px 24px 28px; }
+}
+@media (min-width: 1000px) {
+  .tab-panel { max-width: 1100px; }
+  .fomo-grid { grid-template-columns: 310px 1fr; align-items: start; }
+}
+@media (min-width: 1400px) {
+  .tab-panel { max-width: 1260px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ── HEADER ── -->
 <header id="appHeader">
   <div class="hdr-title">🧠 FOMO対策ジャーナル</div>
-  <div class="hdr-date" id="hdrDate"></div>
+  <div class="hdr-right">
+    <span id="syncBadge">同期済</span>
+    <div class="hdr-date" id="hdrDate"></div>
+  </div>
 </header>
 
 <main id="mainContent">
 
-<!-- ════════════════════════════════
-     TAB 1: FOMO チェック
-════════════════════════════════ -->
+<!-- ════ TAB 1: FOMO チェック ════ -->
 <div id="tab-check" class="tab-panel active">
 
-  <!-- Gauge -->
-  <div class="gauge-wrap">
-    <svg id="gaugesvg" viewBox="0 0 270 150" xmlns="http://www.w3.org/2000/svg">
-      <!-- Background track (upper semicircle via two 90° arcs) -->
-      <path d="M 15 140 A 120 120 0 0 1 135 20 A 120 120 0 0 1 255 140"
-        fill="none" stroke="#1f3a56" stroke-width="15" stroke-linecap="round"/>
+  <div class="tab-heading">🛡️ FOMOチェック</div>
 
-      <!-- Zone color markers (faint stripes) -->
-      <path d="M 15 140 A 120 120 0 0 1 69 37"
-        fill="none" stroke="rgba(0,201,167,0.18)" stroke-width="15" stroke-linecap="round"/>
-      <path d="M 69 37 A 120 120 0 0 1 135 20 A 120 120 0 0 1 201 37"
-        fill="none" stroke="rgba(245,166,35,0.15)" stroke-width="15" stroke-linecap="round"/>
-      <path d="M 201 37 A 120 120 0 0 1 255 140"
-        fill="none" stroke="rgba(255,77,109,0.18)" stroke-width="15" stroke-linecap="round"/>
-
-      <!-- Active arc (score fill via dasharray) -->
-      <path id="gaugeActive"
-        d="M 15 140 A 120 120 0 0 1 135 20 A 120 120 0 0 1 255 140"
-        fill="none" stroke="#00c9a7" stroke-width="15" stroke-linecap="round"
-        stroke-dasharray="0 500"/>
-
-      <!-- Needle -->
-      <line id="gaugeNeedle"
-        x1="135" y1="140" x2="15" y2="140"
-        stroke="#00c9a7" stroke-width="3" stroke-linecap="round"/>
-
-      <!-- Hub -->
-      <circle cx="135" cy="140" r="6" fill="#182e45" stroke="#e2eaf2" stroke-width="2"/>
-
-      <!-- Zone labels -->
-      <text x="11"  y="152" text-anchor="middle" font-size="8.5" fill="#00c9a7" font-weight="700">安全</text>
-      <text x="135" y="11"  text-anchor="middle" font-size="8.5" fill="#f5a623" font-weight="700">注意</text>
-      <text x="259" y="152" text-anchor="middle" font-size="8.5" fill="#ff4d6d" font-weight="700">危険</text>
-    </svg>
-
-    <div class="score-row">
-      <span id="scoreNum" style="color:var(--teal);">0</span>
-      <span class="score-denom">/10</span>
-    </div>
-    <div id="riskBadge" class="r0">✅ リスク低 — エントリー可</div>
-    <div id="recommendBox">全ての項目に問題なし。冷静な状態でトレードできます。</div>
-    <div id="breatheHint">🌬️ <strong>深呼吸のヒント：</strong> 4秒かけて息を吸い → 4秒間止め → 6秒かけて吐く。これを3回繰り返してから判断しましょう。</div>
-  </div>
-
-  <!-- Questions -->
+  <!-- 銘柄名・日付 -->
   <div class="card">
-    <div class="card-title">
-      FOMO チェックリスト
-      <div class="q-count-row">
-        <span class="q-count-badge">該当: <span id="checkedCount">0</span>/10</span>
+    <div class="card-title">📌 対象銘柄・日時</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div class="form-group" style="flex:1;min-width:130px;margin-bottom:0;">
+        <label class="form-label">銘柄名・コード</label>
+        <input type="text" id="fomoTicker" placeholder="例：7203 トヨタ">
+      </div>
+      <div class="form-group" style="flex:2;min-width:200px;margin-bottom:0;">
+        <label class="form-label">日付・時刻</label>
+        <div class="dt-row">
+          <input type="date" id="fomoDate">
+          <input type="time" id="fomoTime">
+        </div>
       </div>
     </div>
-    <div id="questionList"></div>
   </div>
 
-  <div class="btn-row" style="margin-bottom:12px;">
+  <!-- PC: 2-col grid -->
+  <div class="fomo-grid">
+
+    <div class="gauge-wrap">
+      <svg id="gaugesvg" viewBox="0 0 270 150" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 15 140 A 120 120 0 0 1 135 20 A 120 120 0 0 1 255 140"
+          fill="none" stroke="#1f3a56" stroke-width="15" stroke-linecap="round"/>
+        <path d="M 15 140 A 120 120 0 0 1 69 37"
+          fill="none" stroke="rgba(0,201,167,0.18)" stroke-width="15" stroke-linecap="round"/>
+        <path d="M 69 37 A 120 120 0 0 1 135 20 A 120 120 0 0 1 201 37"
+          fill="none" stroke="rgba(245,166,35,0.15)" stroke-width="15" stroke-linecap="round"/>
+        <path d="M 201 37 A 120 120 0 0 1 255 140"
+          fill="none" stroke="rgba(255,77,109,0.18)" stroke-width="15" stroke-linecap="round"/>
+        <path id="gaugeActive"
+          d="M 15 140 A 120 120 0 0 1 135 20 A 120 120 0 0 1 255 140"
+          fill="none" stroke="#00c9a7" stroke-width="15" stroke-linecap="round"
+          stroke-dasharray="0 500"/>
+        <line id="gaugeNeedle" x1="135" y1="140" x2="15" y2="140"
+          stroke="#00c9a7" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="135" cy="140" r="6" fill="#182e45" stroke="#e2eaf2" stroke-width="2"/>
+        <text x="11"  y="152" text-anchor="middle" font-size="8.5" fill="#00c9a7" font-weight="700">安全</text>
+        <text x="135" y="11"  text-anchor="middle" font-size="8.5" fill="#f5a623" font-weight="700">注意</text>
+        <text x="259" y="152" text-anchor="middle" font-size="8.5" fill="#ff4d6d" font-weight="700">危険</text>
+      </svg>
+      <div class="score-row">
+        <span id="scoreNum" style="color:var(--teal);">0</span>
+        <span class="score-denom">/10</span>
+      </div>
+      <div id="riskBadge" class="r0">✅ リスク低 — エントリー可</div>
+      <div id="recommendBox">全ての項目に問題なし。冷静な状態でトレードできます。</div>
+      <div id="breatheHint">🌬️ <strong>深呼吸：</strong>4秒吸う → 4秒止める → 6秒吐く。3回繰り返してから判断。</div>
+    </div>
+
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-title">
+        📋 チェックリスト
+        <span class="q-count-badge" style="margin-left:auto;">該当: <span id="checkedCount">0</span>/10</span>
+      </div>
+      <div id="questionList"></div>
+    </div>
+
+  </div><!-- /fomo-grid -->
+
+  <div class="btn-row" style="margin-bottom:8px;">
     <button class="btn btn-secondary" onclick="resetCheck()">リセット</button>
-    <button class="btn btn-primary" onclick="saveCheck()">💾 結果を保存</button>
+    <button class="btn btn-primary"   onclick="saveCheck()">💾 結果を保存</button>
   </div>
 
-</div><!-- /tab-check -->
+</div>
 
 
-<!-- ════════════════════════════════
-     TAB 2: A-B-C-D 法
-════════════════════════════════ -->
+<!-- ════ TAB 2: A-B-C-D ════ -->
 <div id="tab-abcd" class="tab-panel">
 
+  <div class="tab-heading">📓 認知ジャーナル（A-B-C-D法）</div>
+
   <div class="about-card">
-    <div class="about-title">📓 認知ジャーナル（A-B-C-D法）</div>
     <div class="about-text">
-      FOMO や感情的なトレードの思考パターンを書き出し、客観的に見直すことで、
+      FOMOや感情的なトレードの思考パターンを書き出し、客観的に見直すことで、
       次回同じ状況でも冷静に対処できるようにします。
     </div>
   </div>
@@ -426,60 +420,43 @@ summary::-webkit-details-marker { color: var(--acc); }
   <div class="card">
     <div class="form-group">
       <label class="form-label">📅 日付・時刻</label>
-      <input type="text" id="abcdDate" readonly style="color:var(--muted);cursor:default;">
+      <div class="dt-row">
+        <input type="date" id="abcdDate">
+        <input type="time" id="abcdTime">
+      </div>
     </div>
-
     <div class="form-group">
-      <label class="form-label">
-        <span class="letter-badge lba">A</span>出来事（Activating Event）
-      </label>
-      <textarea id="abcdA"
-        placeholder="何が起きたか？どの銘柄・場面でFOMOを感じたか？&#10;例：〇〇株が急騰しているのを見て機会を逃した感覚があった。"></textarea>
+      <label class="form-label"><span class="letter-badge lba">A</span>出来事（Activating Event）</label>
+      <textarea id="abcdA" placeholder="何が起きたか？どの銘柄・場面でFOMOを感じたか？&#10;例：〇〇株が急騰しているのを見て機会を逃した感覚があった。"></textarea>
     </div>
-
     <div class="form-group">
-      <label class="form-label">
-        <span class="letter-badge lbb">B</span>信念・思考（Beliefs）
-      </label>
-      <textarea id="abcdB"
-        placeholder="その時、頭の中でどんな言葉が流れていたか？&#10;例：「自分だけ取り残された」「また損した気分」「次の波には絶対乗る」"></textarea>
+      <label class="form-label"><span class="letter-badge lbb">B</span>信念・思考（Beliefs）</label>
+      <textarea id="abcdB" placeholder="その時、頭の中でどんな言葉が流れていたか？&#10;例：「自分だけ取り残された」「また損した気分」「次の波には絶対乗る」"></textarea>
     </div>
-
     <div class="form-group">
-      <label class="form-label">
-        <span class="letter-badge lbc">C</span>結果（Consequences）
-      </label>
-      <textarea id="abcdC"
-        placeholder="その思考がどんな感情・行動を生んだか？&#10;例：焦り・怒り・衝動的なエントリー・ルール無視のポジション追加をしてしまった。"></textarea>
+      <label class="form-label"><span class="letter-badge lbc">C</span>結果（Consequences）</label>
+      <textarea id="abcdC" placeholder="その思考がどんな感情・行動を生んだか？&#10;例：焦り・怒り・衝動的なエントリー・ルール無視のポジション追加をしてしまった。"></textarea>
     </div>
-
     <div class="form-group">
-      <label class="form-label">
-        <span class="letter-badge lbd">D</span>反論・建設的対話（Dispute）
-      </label>
-      <textarea id="abcdD"
-        placeholder="「親しい友人が同じ悩みを話してきたら何と言うか？」という視点で書く&#10;例：「1回逃しても問題ない。ルールを守ることが長期の利益につながる。次の機会は必ず来る。」"></textarea>
+      <label class="form-label"><span class="letter-badge lbd">D</span>反論・建設的対話（Dispute）</label>
+      <textarea id="abcdD" placeholder="「親しい友人が同じ悩みを話してきたら何と言うか？」という視点で書く&#10;例：「1回逃しても問題ない。ルールを守ることが長期の利益につながる。次の機会は必ず来る。」"></textarea>
     </div>
-
     <div class="form-group">
       <label class="form-label">💡 今日の学び・気づき</label>
-      <textarea id="abcdLearn"
-        placeholder="この経験から何を学べましたか？次回どう行動しますか？"></textarea>
+      <textarea id="abcdLearn" placeholder="この経験から何を学べましたか？次回どう行動しますか？"></textarea>
     </div>
-
     <button class="btn btn-primary" onclick="saveAbcd()">📓 ジャーナルを保存</button>
   </div>
 
-</div><!-- /tab-abcd -->
+</div>
 
 
-<!-- ════════════════════════════════
-     TAB 3: 学習 P&L
-════════════════════════════════ -->
+<!-- ════ TAB 3: 学習 P&L ════ -->
 <div id="tab-learning" class="tab-panel">
 
+  <div class="tab-heading">📈 学習P&L ジャーナル</div>
+
   <div class="about-card">
-    <div class="about-title">📈 学習P&L ジャーナル</div>
     <div class="about-text">
       <strong>損益（金額）ではなく「学習と成長」</strong>を記録するジャーナルです。
       一貫性・改善・気づきを積み重ねることが、長期的なトレーダーとしての成功につながります。
@@ -488,34 +465,28 @@ summary::-webkit-details-marker { color: var(--acc); }
 
   <div class="card">
     <div class="form-group">
-      <label class="form-label">📅 日付</label>
-      <input type="text" id="learnDate" readonly style="color:var(--muted);cursor:default;">
+      <label class="form-label">📅 日付・時刻</label>
+      <div class="dt-row">
+        <input type="date" id="learnDate">
+        <input type="time" id="learnTime">
+      </div>
     </div>
-
     <div class="form-group">
       <label class="form-label">📊 本日の相場・取引概要</label>
-      <textarea id="learnMarket"
-        placeholder="今日の市場状況、監視銘柄、エントリー・エグジットの概要など（任意）"></textarea>
+      <textarea id="learnMarket" placeholder="今日の市場状況、監視銘柄、エントリー・エグジットの概要など（任意）"></textarea>
     </div>
-
     <div class="form-group">
       <label class="form-label">🔍 今日の学び・気づき</label>
-      <textarea id="learnInsight"
-        placeholder="今日のトレードや観察から気づいたことは何ですか？&#10;パターン、市場の動き、自分の反応など何でも。"></textarea>
+      <textarea id="learnInsight" placeholder="今日のトレードや観察から気づいたことは何ですか？&#10;パターン、市場の動き、自分の反応など何でも。"></textarea>
     </div>
-
     <div class="form-group">
       <label class="form-label">✅ うまくできたこと</label>
-      <textarea id="learnGood"
-        placeholder="今日ルールを守れた場面、感情をコントロールできた瞬間、&#10;正しいプロセスを踏めた点は何ですか？"></textarea>
+      <textarea id="learnGood" placeholder="今日ルールを守れた場面、感情をコントロールできた瞬間、&#10;正しいプロセスを踏めた点は何ですか？"></textarea>
     </div>
-
     <div class="form-group">
       <label class="form-label">🔧 改善したいこと・反省点</label>
-      <textarea id="learnImprove"
-        placeholder="今日の課題、次回改善したいポイントは？&#10;具体的なシナリオで書くと効果的です。"></textarea>
+      <textarea id="learnImprove" placeholder="今日の課題、次回改善したいポイントは？&#10;具体的なシナリオで書くと効果的です。"></textarea>
     </div>
-
     <div class="form-group">
       <label class="form-label">⭐ 感情コントロール評価</label>
       <div class="stars" id="starContainer">
@@ -527,45 +498,37 @@ summary::-webkit-details-marker { color: var(--acc); }
       </div>
       <div id="starLabel">タップして評価</div>
     </div>
-
     <div class="form-group">
       <label class="form-label">🎯 明日のフォーカス（1つだけ）</label>
-      <textarea id="learnFocus" style="min-height:52px;"
-        placeholder="明日特に意識する1つのことを書きましょう。"></textarea>
+      <textarea id="learnFocus" style="min-height:54px;" placeholder="明日特に意識する1つのことを書きましょう。"></textarea>
     </div>
-
     <button class="btn btn-primary" onclick="saveLearning()">📈 学習P&Lを保存</button>
   </div>
 
-</div><!-- /tab-learning -->
+</div>
 
 
-<!-- ════════════════════════════════
-     TAB 4: 履歴
-════════════════════════════════ -->
+<!-- ════ TAB 4: 履歴 ════ -->
 <div id="tab-history" class="tab-panel">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-    <div style="font-size:14px;font-weight:800;">記録一覧</div>
-    <div id="histCount" style="font-size:11px;color:var(--muted);"></div>
+  <div class="tab-heading">📚 記録一覧</div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+    <div class="history-filter" style="margin-bottom:0;flex:1;">
+      <button class="filter-btn active" onclick="filterHist('all',this)">すべて</button>
+      <button class="filter-btn" onclick="filterHist('fomo',this)">🛡️ チェック</button>
+      <button class="filter-btn" onclick="filterHist('abcd',this)">📓 A-B-C-D</button>
+      <button class="filter-btn" onclick="filterHist('learn',this)">📈 学習P&L</button>
+    </div>
+    <div id="histCount" style="font-size:11px;color:var(--muted);white-space:nowrap;"></div>
   </div>
-
-  <div class="history-filter">
-    <button class="filter-btn active" onclick="filterHist('all',this)">すべて</button>
-    <button class="filter-btn" onclick="filterHist('fomo',this)">🛡️ チェック</button>
-    <button class="filter-btn" onclick="filterHist('abcd',this)">📓 A-B-C-D</button>
-    <button class="filter-btn" onclick="filterHist('learn',this)">📈 学習P&L</button>
-  </div>
-
   <div id="historyList"></div>
-</div><!-- /tab-history -->
+</div>
 
 
-<!-- ════════════════════════════════
-     TAB 5: 設定
-════════════════════════════════ -->
+<!-- ════ TAB 5: 設定 ════ -->
 <div id="tab-settings" class="tab-panel">
 
-  <!-- GAS Sync -->
+  <div class="tab-heading">⚙️ 設定</div>
+
   <div class="card">
     <div class="card-title">🔄 クラウド同期（GAS連携）</div>
     <div class="form-group">
@@ -574,38 +537,40 @@ summary::-webkit-details-marker { color: var(--acc); }
         placeholder="https://script.google.com/macros/s/..."
         style="font-size:11px;">
     </div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.7;">
-      URLを設定するとGoogle Sheetsにデータが保存され、複数端末から同期できます。
-      未設定の場合はこの端末のみに保存されます。
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.8;">
+      URLを保存するとこの端末にURLが記憶され、次回から自動同期されます。<br>
+      <strong style="color:var(--txt);">複数端末で使う場合：</strong>
+      HTMLファイルの <code style="color:var(--acc);">var GAS_URL = ''</code> の中にURLを貼り付け、
+      GitHubに再アップロードすると全端末で自動同期されます。
     </div>
-    <div class="btn-row">
+    <div class="btn-row" style="flex-wrap:wrap;gap:6px;">
       <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="testGas()">接続テスト</button>
-      <button class="btn btn-primary btn-sm" style="flex:1;" onclick="saveGasUrl()">URLを保存</button>
+      <button class="btn btn-primary btn-sm"   style="flex:1;" onclick="saveGasUrl()">URLを保存</button>
+      <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="syncNow()">今すぐ同期</button>
     </div>
-    <div id="syncStatus" style="font-size:11px;color:var(--muted);margin-top:8px;"></div>
+    <div id="syncStatusMsg" style="font-size:11px;color:var(--muted);margin-top:9px;"></div>
 
-    <details style="margin-top:10px;">
+    <details style="margin-top:12px;">
       <summary>▶ GASスクリプトの設定方法</summary>
       <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.8;">
         <strong style="color:var(--txt);">設定手順：</strong><br>
-        1. Google Apps Script（script.google.com）で新しいプロジェクトを作成<br>
+        1. Google Apps Script（script.google.com）で新規プロジェクト作成<br>
         2. 下のコードをコピーして貼り付け<br>
         3. 「デプロイ」→「新しいデプロイ」→「ウェブアプリ」<br>
-        4. アクセス：「全員」に設定して承認<br>
-        5. 発行されたURLをここに貼り付ける
+        4. 実行ユーザー:「自分」/ アクセス:「全員」に設定して承認<br>
+        5. 発行されたURLをここに貼り付けて保存
       </div>
       <div class="gas-code" id="gasCodeBlock"></div>
       <div class="code-copy-row">
-        <button class="btn btn-secondary btn-sm" onclick="copyGasCode()">📋 コピー</button>
+        <button class="btn btn-secondary btn-sm" onclick="copyGasCode()">📋 コードをコピー</button>
       </div>
     </details>
   </div>
 
-  <!-- Data Management -->
   <div class="card">
     <div class="card-title">💾 データ管理</div>
     <div class="data-stats" id="dataStats"></div>
-    <div style="height:10px;"></div>
+    <div style="height:12px;"></div>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="exportData()">📤 エクスポート</button>
       <button class="btn btn-secondary" onclick="importData()">📥 インポート</button>
@@ -613,33 +578,27 @@ summary::-webkit-details-marker { color: var(--acc); }
     <input type="file" id="importFile" accept=".json" style="display:none;" onchange="handleImport(event)">
   </div>
 
-  <!-- Danger Zone -->
   <div class="card">
     <div class="card-title">⚠️ 削除</div>
     <button class="btn btn-danger" onclick="clearAll()">🗑️ すべてのデータを削除</button>
   </div>
 
-  <!-- About -->
   <div class="about-card">
     <div class="about-title">📖 FOMOを防ぐ3つの科学的アプローチ</div>
     <div class="about-text">
-      <strong>① 学習P&L：</strong>
-      損益を唯一の評価基準にしない。一貫性・気づき・成長を「利益」と見なすことで、機会を逃しても脅威と感じなくなる。<br><br>
-      <strong>② 曝露療法（チェックリスト）：</strong>
-      FOMOが高まる状況を可視化し、冷静な状態を保つ練習を繰り返す。スコアが高い時はエントリーを見送ることで「脅威=冷静な選択」を脳に定着させる。<br><br>
-      <strong>③ 認知ジャーナル（A-B-C-D法）：</strong>
-      ネガティブな思考パターンを客観的に把握し、建設的な対話で修正する。リアルタイムで気づき、集中状態に戻れるようにする。
+      <strong>① 学習P&L：</strong>損益を唯一の評価基準にしない。一貫性・気づき・成長を「利益」と見なすことで、機会を逃しても脅威と感じなくなる。<br><br>
+      <strong>② 曝露療法（チェックリスト）：</strong>FOMOが高まる状況を可視化し、冷静な状態を保つ練習を繰り返す。スコアが高い時はエントリーを見送ることで「脅威=冷静な選択」を脳に定着させる。<br><br>
+      <strong>③ 認知ジャーナル（A-B-C-D法）：</strong>ネガティブな思考パターンを客観的に把握し、建設的な対話で修正する。リアルタイムで気づき、集中状態に戻れるようにする。
     </div>
   </div>
 
   <div style="height:12px;"></div>
-</div><!-- /tab-settings -->
+</div>
 
 </main>
 
-<!-- ── BOTTOM NAV ── -->
 <nav id="bottomNav">
-  <button class="nav-btn active"  onclick="showTab('check')">
+  <button class="nav-btn active" onclick="showTab('check')">
     <span class="nav-icon">🛡️</span><span class="nav-label">チェック</span>
   </button>
   <button class="nav-btn" onclick="showTab('abcd')">
@@ -659,6 +618,12 @@ summary::-webkit-details-marker { color: var(--acc); }
 <div id="toast"></div>
 
 <script>
+/* ══════════════════════════════════════════
+   ★ GAS URL設定（複数端末で使う場合ここに貼る）
+   GASデプロイ後にURLを '' の中に入れてGitHubに再アップ
+══════════════════════════════════════════ */
+var GAS_URL = '';
+
 /* ══════════════════════════════════════════
    DATA
 ══════════════════════════════════════════ */
@@ -691,12 +656,12 @@ var STAR_LABELS = [
   '普通・まあまあ（3）', 'うまく対処できた（4）', '完璧にコントロールできた（5）'
 ];
 
-var GAS_CODE_TEXT = 'var SHEET = \'FOMO_Journal\';\n\nfunction doGet(e) {\n  var ss = SpreadsheetApp.getActiveSpreadsheet();\n  var sh = ss.getSheetByName(SHEET) ||\n           (ss.insertSheet(SHEET).appendRow([\'id\',\'type\',\'date\',\'time\',\'json\',\'at\']), ss.getSheetByName(SHEET));\n  var rows = sh.getDataRange().getValues();\n  var recs = [];\n  for (var i = 1; i < rows.length; i++) {\n    if (rows[i][4]) { try { recs.push(JSON.parse(rows[i][4])); } catch(e){} }\n  }\n  return ContentService\n    .createTextOutput(JSON.stringify({success:true, records:recs}))\n    .setMimeType(ContentService.MimeType.JSON);\n}\n\nfunction doPost(e) {\n  var ss = SpreadsheetApp.getActiveSpreadsheet();\n  var sh = ss.getSheetByName(SHEET) ||\n           (ss.insertSheet(SHEET).appendRow([\'id\',\'type\',\'date\',\'time\',\'json\',\'at\']), ss.getSheetByName(SHEET));\n  try {\n    var d = JSON.parse(e.postData.contents);\n    sh.appendRow([d.id||\'\'  , d.type||\'\'  , d.date||\'\'  ,\n                  d.time||\'\'  , JSON.stringify(d), new Date().toISOString()]);\n    return ContentService\n      .createTextOutput(JSON.stringify({success:true}))\n      .setMimeType(ContentService.MimeType.JSON);\n  } catch(err) {\n    return ContentService\n      .createTextOutput(JSON.stringify({success:false, error:err.message}))\n      .setMimeType(ContentService.MimeType.JSON);\n  }\n}';
+var GAS_CODE = 'var SHEET = \'FOMO_Journal\';\n\nfunction doGet(e) {\n  var ss = SpreadsheetApp.getActiveSpreadsheet();\n  var sh = ss.getSheetByName(SHEET) ||\n           (ss.insertSheet(SHEET).appendRow([\'id\',\'type\',\'date\',\'time\',\'json\',\'at\']), ss.getSheetByName(SHEET));\n  var rows = sh.getDataRange().getValues();\n  var recs = [];\n  for (var i = 1; i < rows.length; i++) {\n    if (rows[i][4]) { try { recs.push(JSON.parse(rows[i][4])); } catch(e){} }\n  }\n  return ContentService\n    .createTextOutput(JSON.stringify({success:true, records:recs}))\n    .setMimeType(ContentService.MimeType.JSON);\n}\n\nfunction doPost(e) {\n  var ss = SpreadsheetApp.getActiveSpreadsheet();\n  var sh = ss.getSheetByName(SHEET) ||\n           (ss.insertSheet(SHEET).appendRow([\'id\',\'type\',\'date\',\'time\',\'json\',\'at\']), ss.getSheetByName(SHEET));\n  try {\n    var d = JSON.parse(e.postData.contents);\n    sh.appendRow([d.id||\'\', d.type||\'\', d.date||\'\',\n                  d.time||\'\', JSON.stringify(d), new Date().toISOString()]);\n    return ContentService\n      .createTextOutput(JSON.stringify({success:true}))\n      .setMimeType(ContentService.MimeType.JSON);\n  } catch(err) {\n    return ContentService\n      .createTextOutput(JSON.stringify({success:false, error:err.message}))\n      .setMimeType(ContentService.MimeType.JSON);\n  }\n}';
 
 /* ══════════════════════════════════════════
    STATE
 ══════════════════════════════════════════ */
-var fomoAns  = new Array(10).fill(false);
+var fomoAns    = new Array(10).fill(false);
 var starRating = 0;
 var curFilter  = 'all';
 var records    = [];
@@ -709,18 +674,23 @@ function init() {
   buildQuestions();
   updateGauge(0);
   setDateTime();
+  document.getElementById('gasCodeBlock').textContent = GAS_CODE;
+
+  /* GAS URL: HTML埋め込み優先、次にlocalStorage */
+  var storedUrl = localStorage.getItem('fomoGasUrl') || '';
+  var effectiveUrl = GAS_URL || storedUrl;
+  if (GAS_URL && !storedUrl) localStorage.setItem('fomoGasUrl', GAS_URL);
+  if (effectiveUrl) document.getElementById('gasUrlInput').value = effectiveUrl;
+
   loadData();
-  document.getElementById('gasCodeBlock').textContent = GAS_CODE_TEXT;
-  var savedUrl = localStorage.getItem('fomoGasUrl') || '';
-  if (savedUrl) document.getElementById('gasUrlInput').value = savedUrl;
   updateStats();
 }
 
 /* ══════════════════════════════════════════
-   TAB NAVIGATION
+   TAB
 ══════════════════════════════════════════ */
 function showTab(name) {
-  var panels = document.querySelectorAll('.tab-panel');
+  var panels  = document.querySelectorAll('.tab-panel');
   var navBtns = document.querySelectorAll('.nav-btn');
   for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
   for (var j = 0; j < navBtns.length; j++) navBtns[j].classList.remove('active');
@@ -732,7 +702,6 @@ function showTab(name) {
   var idx = order.indexOf(name);
   if (idx >= 0 && navBtns[idx]) navBtns[idx].classList.add('active');
 
-  if (name === 'abcd' || name === 'learning') setDateTime();
   if (name === 'history')  renderHistory();
   if (name === 'settings') updateStats();
 }
@@ -741,50 +710,55 @@ function showTab(name) {
    HEADER DATE
 ══════════════════════════════════════════ */
 function updateHdrDate() {
-  var now = new Date();
+  var now  = new Date();
   var days = ['日','月','火','水','木','金','土'];
   document.getElementById('hdrDate').textContent =
-    (now.getMonth()+1) + '月' + now.getDate() + '日（' + days[now.getDay()] + '）';
+    now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日（' + days[now.getDay()] + '）';
+}
+
+/* ══════════════════════════════════════════
+   SYNC BADGE
+══════════════════════════════════════════ */
+function updateSyncBadge(state) {
+  var el  = document.getElementById('syncBadge');
+  var url = localStorage.getItem('fomoGasUrl');
+  if (!el) return;
+  if (!url) { el.style.display = 'none'; return; }
+  el.style.display = 'inline-block';
+  el.className = '';
+  if      (state === 'loading') { el.className = 'loading'; el.textContent = '取得中...'; }
+  else if (state === 'synced')  { el.textContent = '✓ 同期済'; }
+  else if (state === 'error')   { el.className = 'error'; el.textContent = '未同期'; }
+  else                          { el.style.display = 'none'; }
 }
 
 /* ══════════════════════════════════════════
    GAUGE
 ══════════════════════════════════════════ */
 function updateGauge(score) {
-  var r = 120;
-  var cx = 135, cy = 140;
-  var totalLen = Math.PI * r; // ~376.99
+  var totalLen = Math.PI * 120;
   var filled   = (score / 10) * totalLen;
   var color    = gaugeColor(score);
 
-  /* Active arc via dasharray */
   document.getElementById('gaugeActive').setAttribute(
     'stroke-dasharray', filled.toFixed(1) + ' ' + (totalLen + 100).toFixed(1));
   document.getElementById('gaugeActive').setAttribute('stroke', color);
 
-  /* Needle */
   var ang = Math.PI * (1 - score / 10);
-  var nLen = 88;
-  var nx = cx + nLen * Math.cos(ang);
-  var ny = cy - nLen * Math.sin(ang);
-  var needle = document.getElementById('gaugeNeedle');
-  needle.setAttribute('x2', nx.toFixed(1));
-  needle.setAttribute('y2', ny.toFixed(1));
-  needle.setAttribute('stroke', color);
+  var nx  = 135 + 88 * Math.cos(ang);
+  var ny  = 140 - 88 * Math.sin(ang);
+  var nd  = document.getElementById('gaugeNeedle');
+  nd.setAttribute('x2', nx.toFixed(1));
+  nd.setAttribute('y2', ny.toFixed(1));
+  nd.setAttribute('stroke', color);
 
-  /* Score text */
   var sn = document.getElementById('scoreNum');
-  sn.textContent = score;
-  sn.style.color = color;
+  sn.textContent = score; sn.style.color = color;
 
-  /* Badge & recommendation */
   var lv = riskLevel(score);
-  var badge = document.getElementById('riskBadge');
-  badge.className = RISK[lv].cls;
-  badge.textContent = RISK[lv].label;
+  var bg = document.getElementById('riskBadge');
+  bg.className = RISK[lv].cls; bg.textContent = RISK[lv].label;
   document.getElementById('recommendBox').textContent = RISK[lv].rec;
-
-  /* Breathe hint */
   document.getElementById('breatheHint').style.display = score >= 6 ? 'block' : 'none';
 }
 
@@ -794,7 +768,6 @@ function gaugeColor(s) {
   if (s <= 6) return '#ff7c4d';
   return '#ff4d6d';
 }
-
 function riskLevel(s) {
   if (s <= 2) return 0;
   if (s <= 4) return 1;
@@ -803,61 +776,56 @@ function riskLevel(s) {
 }
 
 /* ══════════════════════════════════════════
-   BUILD QUESTIONS
+   QUESTIONS
 ══════════════════════════════════════════ */
 function buildQuestions() {
   var html = '';
   for (var i = 0; i < QUESTIONS.length; i++) {
     html += '<div class="q-item" id="qi-' + i + '" onclick="toggleQ(' + i + ')">';
     html += '<div class="q-check" id="qc-' + i + '"></div>';
-    html += '<div class="q-text">' + (i+1) + '. ' + QUESTIONS[i] + '</div>';
-    html += '</div>';
+    html += '<div class="q-text">' + (i+1) + '. ' + QUESTIONS[i] + '</div></div>';
   }
   document.getElementById('questionList').innerHTML = html;
 }
 
-/* ══════════════════════════════════════════
-   FOMO CHECK
-══════════════════════════════════════════ */
 function toggleQ(i) {
   fomoAns[i] = !fomoAns[i];
-  var item  = document.getElementById('qi-' + i);
-  var check = document.getElementById('qc-' + i);
-  if (fomoAns[i]) { item.classList.add('checked'); check.textContent = '✓'; }
-  else            { item.classList.remove('checked'); check.textContent = ''; }
+  var item = document.getElementById('qi-' + i);
+  var chk  = document.getElementById('qc-' + i);
+  if (fomoAns[i]) { item.classList.add('checked'); chk.textContent = '✓'; }
+  else            { item.classList.remove('checked'); chk.textContent = ''; }
   var s = calcScore();
   document.getElementById('checkedCount').textContent = s;
   updateGauge(s);
 }
 
-function calcScore() {
-  return fomoAns.filter(function(v){ return v; }).length;
-}
+function calcScore() { return fomoAns.filter(function(v){ return v; }).length; }
 
 function resetCheck() {
   fomoAns = new Array(10).fill(false);
   for (var i = 0; i < 10; i++) {
-    var item  = document.getElementById('qi-' + i);
-    var check = document.getElementById('qc-' + i);
-    if (item)  item.classList.remove('checked');
-    if (check) check.textContent = '';
+    var item = document.getElementById('qi-' + i);
+    var chk  = document.getElementById('qc-' + i);
+    if (item) item.classList.remove('checked');
+    if (chk)  chk.textContent = '';
   }
   document.getElementById('checkedCount').textContent = '0';
   updateGauge(0);
+  document.getElementById('fomoTicker').value = '';
+  setDateTime();
 }
 
 function saveCheck() {
-  var score = calcScore();
-  var lv    = riskLevel(score);
-  var now   = new Date();
-  var checked = [];
-  for (var i = 0; i < 10; i++) { if (fomoAns[i]) checked.push(QUESTIONS[i]); }
+  var score  = calcScore();
+  var ticker = document.getElementById('fomoTicker').value.trim();
+  var items  = [];
+  for (var i = 0; i < 10; i++) { if (fomoAns[i]) items.push(QUESTIONS[i]); }
 
   var rec = {
     id: genId(), type: 'fomo',
-    date: fmtDate(now), time: fmtTime(now),
-    score: score, riskLevel: lv,
-    checkedItems: checked
+    date: getPickerDate('fomoDate'), time: getPickerTime('fomoTime'),
+    ticker: ticker, score: score, riskLevel: riskLevel(score),
+    checkedItems: items
   };
   saveRec(rec);
   showToast('FOMOチェック保存（スコア: ' + score + '/10）', 'ok');
@@ -870,17 +838,15 @@ function saveCheck() {
 function saveAbcd() {
   var a = document.getElementById('abcdA').value.trim();
   var b = document.getElementById('abcdB').value.trim();
-  var c = document.getElementById('abcdC').value.trim();
-  var d = document.getElementById('abcdD').value.trim();
-  var l = document.getElementById('abcdLearn').value.trim();
-
   if (!a && !b) { showToast('A（出来事）またはB（信念）を入力してください', 'err'); return; }
 
-  var now = new Date();
   var rec = {
     id: genId(), type: 'abcd',
-    date: fmtDate(now), time: fmtTime(now),
-    a: a, b: b, c: c, d: d, learn: l
+    date: getPickerDate('abcdDate'), time: getPickerTime('abcdTime'),
+    a: a, b: b,
+    c: document.getElementById('abcdC').value.trim(),
+    d: document.getElementById('abcdD').value.trim(),
+    learn: document.getElementById('abcdLearn').value.trim()
   };
   saveRec(rec);
   showToast('A-B-C-Dジャーナルを保存しました', 'ok');
@@ -903,23 +869,20 @@ function setStar(n) {
 }
 
 function saveLearning() {
-  var market   = document.getElementById('learnMarket').value.trim();
-  var insight  = document.getElementById('learnInsight').value.trim();
-  var good     = document.getElementById('learnGood').value.trim();
-  var improve  = document.getElementById('learnImprove').value.trim();
-  var focus    = document.getElementById('learnFocus').value.trim();
-
+  var insight = document.getElementById('learnInsight').value.trim();
+  var good    = document.getElementById('learnGood').value.trim();
+  var improve = document.getElementById('learnImprove').value.trim();
   if (!insight && !good && !improve) {
     showToast('学び・うまくできたこと・改善点のいずれかを入力してください', 'err');
     return;
   }
-
-  var now = new Date();
   var rec = {
     id: genId(), type: 'learn',
-    date: fmtDate(now), time: fmtTime(now),
-    market: market, insight: insight, good: good,
-    improve: improve, star: starRating, focus: focus
+    date: getPickerDate('learnDate'), time: getPickerTime('learnTime'),
+    market:  document.getElementById('learnMarket').value.trim(),
+    insight: insight, good: good, improve: improve,
+    star: starRating,
+    focus: document.getElementById('learnFocus').value.trim()
   };
   saveRec(rec);
   showToast('学習P&Lを保存しました', 'ok');
@@ -941,7 +904,7 @@ function filterHist(type, el) {
 }
 
 function renderHistory() {
-  var list = document.getElementById('historyList');
+  var list     = document.getElementById('historyList');
   var filtered = records.filter(function(r){
     return curFilter === 'all' || r.type === curFilter;
   }).slice().reverse();
@@ -953,7 +916,6 @@ function renderHistory() {
       '<div class="empty-txt">記録がまだありません。<br>チェックやジャーナルを入力してみましょう。</div></div>';
     return;
   }
-
   var html = '';
   for (var i = 0; i < filtered.length; i++) html += renderHItem(filtered[i]);
   list.innerHTML = html;
@@ -963,15 +925,15 @@ function renderHItem(r) {
   var badge = '', sum = '';
   if (r.type === 'fomo') {
     badge = '<span class="type-badge tb-fomo">🛡️ FOMO</span>';
-    sum = '<span style="color:' + gaugeColor(r.score||0) + ';font-weight:800;">' + (r.score||0) + '/10</span>';
+    var tl = r.ticker ? ' [' + escH(r.ticker) + ']' : '';
+    sum = '<span style="color:' + gaugeColor(r.score||0) + ';font-weight:800;">' + (r.score||0) + '/10</span>' + tl;
   } else if (r.type === 'abcd') {
     badge = '<span class="type-badge tb-abcd">📓 A-B-C-D</span>';
-    sum = r.a ? escH(r.a.substring(0,12)) + '…' : '';
+    sum   = r.a ? escH(r.a.substring(0,14)) + '…' : '';
   } else if (r.type === 'learn') {
     badge = '<span class="type-badge tb-learn">📈 学習P&L</span>';
-    sum = r.star ? repStr('⭐',r.star) : '-';
+    sum   = r.star ? repStr('⭐', r.star) : '-';
   }
-
   return '<div class="hist-item">' +
     '<div class="hi-hdr" onclick="toggleHDet(\'' + r.id + '\')">' +
     badge +
@@ -988,11 +950,10 @@ function renderHItem(r) {
 function buildDetail(r) {
   var h = '';
   if (r.type === 'fomo') {
+    if (r.ticker) h += hFld('銘柄', r.ticker);
     h += hFld('スコア', r.score + '/10 ─ ' + RISK[riskLevel(r.score)].label);
-    if (r.checkedItems && r.checkedItems.length > 0) {
-      var items = r.checkedItems.map(function(t,i){ return (i+1)+'. '+t; }).join('\n');
-      h += hFld('該当した項目', items);
-    }
+    if (r.checkedItems && r.checkedItems.length > 0)
+      h += hFld('該当した項目', r.checkedItems.map(function(t,i){ return (i+1)+'. '+t; }).join('\n'));
   } else if (r.type === 'abcd') {
     if (r.a) h += hFld('A ─ 出来事', r.a);
     if (r.b) h += hFld('B ─ 信念・思考', r.b);
@@ -1013,8 +974,7 @@ function buildDetail(r) {
 function hFld(label, val) {
   return '<div class="hi-field">' +
     '<div class="hi-fl">' + label + '</div>' +
-    '<div class="hi-fv">' + escH(val) + '</div>' +
-    '</div>';
+    '<div class="hi-fv">' + escH(val) + '</div></div>';
 }
 
 function toggleHDet(id) {
@@ -1029,8 +989,7 @@ function delRec(id) {
   if (!confirm('この記録を削除しますか？')) return;
   records = records.filter(function(r){ return r.id !== id; });
   localStorage.setItem('fomoRecs', JSON.stringify(records));
-  renderHistory();
-  updateStats();
+  renderHistory(); updateStats();
   showToast('記録を削除しました', 'ok');
 }
 
@@ -1042,7 +1001,7 @@ function saveRec(rec) {
   localStorage.setItem('fomoRecs', JSON.stringify(records));
   updateStats();
   var url = localStorage.getItem('fomoGasUrl');
-  if (url) syncPost(rec, url);
+  if (url) { updateSyncBadge('loading'); syncPost(rec, url); }
 }
 
 function loadData() {
@@ -1050,6 +1009,7 @@ function loadData() {
   if (s) { try { records = JSON.parse(s); } catch(e) { records = []; } }
   var url = localStorage.getItem('fomoGasUrl');
   if (url) syncLoad(url);
+  else updateSyncBadge('none');
 }
 
 /* ══════════════════════════════════════════
@@ -1057,31 +1017,38 @@ function loadData() {
 ══════════════════════════════════════════ */
 function syncPost(rec, url) {
   fetch(url, {
-    method: 'POST',
-    mode: 'no-cors',
+    method: 'POST', mode: 'no-cors',
     headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify(rec)
-  }).catch(function(e){ console.log('GAS POST err:', e); });
+  }).then(function(){ updateSyncBadge('synced'); })
+    .catch(function(e){ console.log('POST err:', e); updateSyncBadge('error'); });
 }
 
 function syncLoad(url) {
+  updateSyncBadge('loading');
   fetch(url)
     .then(function(r){ return r.json(); })
     .then(function(data){
       if (data && data.records && data.records.length > 0) {
         var ids = {};
         records.forEach(function(r){ ids[r.id] = true; });
-        var newOnes = data.records.filter(function(r){ return !ids[r.id]; });
-        if (newOnes.length > 0) {
-          records = data.records.concat(records.filter(function(r){
-            return !data.records.some(function(dr){ return dr.id === r.id; });
-          }));
-          localStorage.setItem('fomoRecs', JSON.stringify(records));
-          updateStats();
-        }
+        var merged = data.records.concat(records.filter(function(r){
+          return !data.records.some(function(dr){ return dr.id === r.id; });
+        }));
+        records = merged;
+        localStorage.setItem('fomoRecs', JSON.stringify(records));
+        updateStats();
       }
+      updateSyncBadge('synced');
+      var st = document.getElementById('syncStatusMsg');
+      if (st) st.textContent = '✅ 同期完了：' + records.length + '件';
     })
-    .catch(function(e){ console.log('GAS GET err:', e); });
+    .catch(function(e){
+      console.log('GET err:', e);
+      updateSyncBadge('error');
+      var st = document.getElementById('syncStatusMsg');
+      if (st) st.textContent = '⚠️ 同期失敗：' + e.message;
+    });
 }
 
 /* ══════════════════════════════════════════
@@ -1094,18 +1061,21 @@ function saveGasUrl() {
   if (url) syncLoad(url);
 }
 
+function syncNow() {
+  var url = localStorage.getItem('fomoGasUrl');
+  if (!url) { showToast('先にURLを保存してください', 'err'); return; }
+  showToast('同期中...', 'ok');
+  syncLoad(url);
+}
+
 function testGas() {
   var url = document.getElementById('gasUrlInput').value.trim();
   if (!url) { showToast('URLを入力してください', 'err'); return; }
-  var st = document.getElementById('syncStatus');
+  var st = document.getElementById('syncStatusMsg');
   st.textContent = '接続テスト中...';
   fetch(url)
-    .then(function(r){
-      st.textContent = r.ok ? '✅ 接続成功' : '⚠️ エラー: ' + r.status;
-    })
-    .catch(function(e){
-      st.textContent = '⚠️ 接続失敗: ' + e.message;
-    });
+    .then(function(r){ st.textContent = r.ok ? '✅ 接続成功' : '⚠️ エラー: ' + r.status; })
+    .catch(function(e){ st.textContent = '⚠️ 接続失敗: ' + e.message; });
 }
 
 function copyGasCode() {
@@ -1114,57 +1084,42 @@ function copyGasCode() {
     navigator.clipboard.writeText(el.textContent)
       .then(function(){ showToast('コードをコピーしました', 'ok'); })
       .catch(function(){ showToast('コピーに失敗しました', 'err'); });
-  } else {
-    showToast('このブラウザではコピーできません', 'err');
-  }
+  } else { showToast('このブラウザではコピーできません', 'err'); }
 }
 
 function exportData() {
-  var json = JSON.stringify(records, null, 2);
-  var blob = new Blob([json], { type: 'application/json' });
+  var blob = new Blob([JSON.stringify(records, null, 2)], { type: 'application/json' });
   var url  = URL.createObjectURL(blob);
   var a    = document.createElement('a');
-  a.href   = url;
-  a.download = 'fomo_journal_' + fmtDate(new Date()).replace(/\//g,'-') + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
+  a.href = url; a.download = 'fomo_journal_' + fmtDate(new Date()).replace(/\//g,'-') + '.json';
+  a.click(); URL.revokeObjectURL(url);
   showToast('エクスポートしました', 'ok');
 }
 
-function importData() {
-  document.getElementById('importFile').click();
-}
+function importData() { document.getElementById('importFile').click(); }
 
 function handleImport(ev) {
-  var file = ev.target.files[0];
-  if (!file) return;
+  var file = ev.target.files[0]; if (!file) return;
   var reader = new FileReader();
   reader.onload = function(e) {
     try {
       var imp = JSON.parse(e.target.result);
       if (!Array.isArray(imp)) throw new Error('invalid');
-      var ids = {};
-      records.forEach(function(r){ ids[r.id] = true; });
+      var ids = {}; records.forEach(function(r){ ids[r.id] = true; });
       var added = imp.filter(function(r){ return !ids[r.id]; });
       records = records.concat(added);
       localStorage.setItem('fomoRecs', JSON.stringify(records));
-      updateStats();
-      showToast(added.length + '件インポートしました', 'ok');
-    } catch(err) {
-      showToast('インポートエラー：無効なファイルです', 'err');
-    }
+      updateStats(); showToast(added.length + '件インポートしました', 'ok');
+    } catch(err) { showToast('インポートエラー：無効なファイルです', 'err'); }
   };
-  reader.readAsText(file);
-  ev.target.value = '';
+  reader.readAsText(file); ev.target.value = '';
 }
 
 function clearAll() {
   if (!confirm('すべてのデータを削除しますか？\nこの操作は取り消せません。')) return;
   if (!confirm('本当に削除してよいですか？')) return;
-  records = [];
-  localStorage.removeItem('fomoRecs');
-  updateStats();
-  showToast('データを削除しました', 'ok');
+  records = []; localStorage.removeItem('fomoRecs');
+  updateStats(); showToast('データを削除しました', 'ok');
 }
 
 function updateStats() {
@@ -1172,56 +1127,56 @@ function updateStats() {
   var ac = records.filter(function(r){ return r.type === 'abcd'; }).length;
   var lc = records.filter(function(r){ return r.type === 'learn'; }).length;
   var el = document.getElementById('dataStats');
-  if (el) {
-    el.innerHTML =
-      '🛡️ FOMOチェック: <strong>' + fc + '</strong> 件<br>' +
-      '📓 A-B-C-D: <strong>' + ac + '</strong> 件<br>' +
-      '📈 学習P&L: <strong>' + lc + '</strong> 件<br>' +
-      '─ 合計: <strong>' + records.length + '</strong> 件';
-  }
+  if (el) el.innerHTML =
+    '🛡️ FOMOチェック: <strong>' + fc + '</strong> 件<br>' +
+    '📓 A-B-C-D: <strong>' + ac + '</strong> 件<br>' +
+    '📈 学習P&L: <strong>' + lc + '</strong> 件<br>' +
+    '─ 合計: <strong>' + records.length + '</strong> 件';
 }
 
 /* ══════════════════════════════════════════
    DATE / TIME
 ══════════════════════════════════════════ */
 function setDateTime() {
-  var now = new Date();
-  var s = fmtDate(now) + '  ' + fmtTime(now);
-  var a = document.getElementById('abcdDate');
-  var b = document.getElementById('learnDate');
-  if (a) a.value = s;
-  if (b) b.value = s;
+  var now     = new Date();
+  var dateVal = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
+  var timeVal = pad(now.getHours()) + ':' + pad(now.getMinutes());
+  ['fomoDate','abcdDate','learnDate'].forEach(function(id){
+    var el = document.getElementById(id); if (el) el.value = dateVal;
+  });
+  ['fomoTime','abcdTime','learnTime'].forEach(function(id){
+    var el = document.getElementById(id); if (el) el.value = timeVal;
+  });
 }
 
+function getPickerDate(id) {
+  var el = document.getElementById(id);
+  if (!el || !el.value) return fmtDate(new Date());
+  return el.value.replace(/-/g, '/');
+}
+function getPickerTime(id) {
+  var el = document.getElementById(id);
+  if (!el || !el.value) return fmtTime(new Date());
+  return el.value;
+}
 function fmtDate(d) {
-  return d.getFullYear() + '/' +
-    pad(d.getMonth()+1) + '/' + pad(d.getDate());
+  return d.getFullYear() + '/' + pad(d.getMonth()+1) + '/' + pad(d.getDate());
 }
-function fmtTime(d) {
-  return pad(d.getHours()) + ':' + pad(d.getMinutes());
-}
-function pad(n) { return n < 10 ? '0'+n : ''+n; }
+function fmtTime(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+function pad(n)     { return n < 10 ? '0'+n : ''+n; }
 
 /* ══════════════════════════════════════════
    HELPERS
 ══════════════════════════════════════════ */
-function genId() {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2,5);
-}
+function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2,5); }
 
 function escH(str) {
   return String(str||'')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function repStr(s, n) {
-  var r = '';
-  for (var i = 0; i < n; i++) r += s;
-  return r;
-}
+function repStr(s, n) { var r = ''; for (var i = 0; i < n; i++) r += s; return r; }
 
 var _toast;
 function showToast(msg, type) {
